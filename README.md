@@ -66,6 +66,18 @@ raylib-3d-proto/
 
 ---
 
+## Testing Strategy
+
+This project follows a clean separation of concerns to enable effective unit testing without requiring the full raylib environment. The testing approach focuses on:
+
+- Separating core logic from rendering
+- Using mock implementations for testing
+- Validating state transitions
+
+For more details on the testing architecture and philosophy, see [TESTING.md](TESTING.md).
+
+---
+
 ## Building & Running
 
 ### Prerequisites
