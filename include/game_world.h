@@ -1,63 +1,69 @@
-#ifndef GAME_WORLD_H
-#define GAME_WORLD_H
+#pragma once
 
-#include "model_editor.h"
-#include "scene.h"
-#include <raylib.h>
 #include <stdbool.h>
 
-// Game object (derived from editor objects but with physics properties)
-typedef struct {
-    Model model;
-    Vector3 position;
-    Vector3 rotation;
-    Vector3 scale;
-    Color color;
-    int id;
+// Simple math types that don't depend on raylib
+typedef struct WorldVector3 {
+  float x;
+  float y;
+  float z;
+} WorldVector3;
 
-    // Physics properties (for future implementation)
-    bool hasPhysics;
-    float mass;
-    Vector3 velocity;
-    Vector3 acceleration;
-    bool isStatic;
+typedef struct WorldColor {
+  unsigned char r;
+  unsigned char g;
+  unsigned char b;
+  unsigned char a;
+} WorldColor;
+
+// Game object (derived from editor objects but with physics properties)
+typedef struct GameObject {
+  WorldVector3 position;
+  WorldVector3 scale;
+  WorldVector3 rotation_axis;
+  float rotation_angle;
+  WorldColor color;
+  int id;
+
+  // Physics properties (for future implementation)
+  bool hasPhysics;
+  float mass;
+  WorldVector3 velocity;
+  WorldVector3 acceleration;
+  bool isStatic;
 } GameObject;
 
 // Game world state
-typedef struct {
-    GameObject* objects;
-    int objectCount;
-    int selectedObjectIndex;
+typedef struct GameWorld {
+  GameObject *objects;
+  int objectCount;
+  int selectedObjectIndex;
 
-    // Environment settings
-    bool showGrid;
-    Vector3 gravity;
-    bool physicsEnabled;
+  // Environment settings
+  bool showGrid;
+  WorldVector3 gravity;
+  bool physicsEnabled;
 
-    // Player controls
-    Camera3D playerCamera;
-    bool firstPersonMode;
-    Vector3 playerPosition;
+  // Player controls
+  WorldVector3 cameraPosition;
+  WorldVector3 cameraTarget;
+  float cameraFOV;
+  bool firstPersonMode;
 } GameWorld;
 
 // Initialize the game world
-void InitGameWorld(GameWorld* world);
-
-// Import objects from model editor to game world
-void ImportFromModelEditor(GameWorld* world, ModelEditor* editor);
-
-// Update the game world state
-void UpdateGameWorld(GameWorld* world, SceneContext* context);
-
-// Draw the game world
-void DrawGameWorld(GameWorld* world, SceneContext* context);
+void InitGameWorld(GameWorld *world);
 
 // Unload resources used by the game world
-void UnloadGameWorld(GameWorld* world);
+void UnloadGameWorld(GameWorld *world);
 
 // Game world functions
-void TogglePhysics(GameWorld* world, bool enabled);
-void ResetGameWorld(GameWorld* world);
-void ToggleFirstPersonMode(GameWorld* world);
+void TogglePhysics(GameWorld *world, bool enabled);
+void ResetGameWorld(GameWorld *world);
+void ToggleFirstPersonMode(GameWorld *world);
 
-#endif // GAME_WORLD_H
+// Object manipulation
+void AddObject(GameWorld *world, WorldVector3 position, WorldVector3 scale,
+               WorldColor color);
+void RemoveObject(GameWorld *world, int index);
+void UpdateWorldPhysics(GameWorld *world, float deltaTime);

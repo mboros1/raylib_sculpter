@@ -19,7 +19,7 @@ TEST_OBJS = $(patsubst $(TEST_DIR)/%.c,$(TEST_BUILD_DIR)/%.o,$(TEST_SRC))
 TEST_TARGETS = $(TEST_BUILD_DIR)/test_world
 
 # Source files
-SRCS = $(wildcard $(SRC_DIR)/*.c)
+SRCS = $(wildcard $(SRC_DIR)/*.c) $(SRC_DIR)/raylib_shim.c
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 # Rules
@@ -43,7 +43,7 @@ format:
 	@echo "Code formatting complete!"
 
 # Test rules
-test: create_build_dir $(TEST_TARGETS)
+test: create_build_dir $(OBJS) $(TEST_TARGETS)
 	@echo "Running unit tests..."
 	@for test in $(TEST_TARGETS); do \
 		echo "Running $$test..."; \
