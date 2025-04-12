@@ -1,19 +1,13 @@
 #ifndef MODEL_EDITOR_H
 #define MODEL_EDITOR_H
 
+#include "scene.h"
 #include <raylib.h>
 #include <raymath.h>
 #include <stdbool.h>
-#include "scene.h"
 
 // Tool types for the model editor
-typedef enum {
-    TOOL_SELECT = 0,
-    TOOL_MOVE,
-    TOOL_ROTATE,
-    TOOL_SCALE,
-    TOOL_CREATE
-} EditorToolType;
+typedef enum { TOOL_SELECT = 0, TOOL_MOVE, TOOL_ROTATE, TOOL_SCALE, TOOL_CREATE } EditorToolType;
 
 // Primitive shape types that can be created
 typedef enum {
@@ -70,4 +64,4 @@ void ScaleSelectedObject(ModelEditor* editor, Vector3 scale);
 void CreatePrimitive(ModelEditor* editor, PrimitiveType type, Vector3 position);
 void DeleteSelectedObject(ModelEditor* editor);
 
-#endif // MODEL_EDITOR_H 
+#endif // MODEL_EDITOR_H

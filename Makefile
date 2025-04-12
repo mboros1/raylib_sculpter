@@ -36,6 +36,12 @@ create_build_dir:
 	@mkdir -p $(TEST_BUILD_DIR)
 	@mkdir -p $(TEST_BUILD_DIR)/mocks
 
+# Code formatting
+format:
+	@echo "Formatting source code..."
+	@find $(SRC_DIR) $(INCLUDE_DIR) -name "*.c" -o -name "*.h" | xargs clang-format -i
+	@echo "Code formatting complete!"
+
 # Test rules
 test: create_build_dir $(TEST_TARGETS)
 	@echo "Running unit tests..."
@@ -55,4 +61,4 @@ $(TEST_BUILD_DIR)/%.o: $(TEST_DIR)/%.c
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_BUILD_DIR)
 
-.PHONY: all clean create_build_dir test 
+.PHONY: all clean create_build_dir test format 
