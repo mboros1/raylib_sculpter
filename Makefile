@@ -58,7 +58,19 @@ $(TEST_BUILD_DIR)/%.o: $(TEST_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
+# Target for testing stl_load (includes main() when TEST_STL_LOAD is defined)
+test_stl_load: $(SRC_DIR)/stl_load.c $(SRC_DIR)/stl_load.h
+	$(CC) $(CFLAGS) -g -O0 -DTEST_STL_LOAD -I$(SRC_DIR) -o $@ $(SRC_DIR)/stl_load.c $(LDFLAGS)
+
+# Target for compiling stl_load.o (object file without main)
+stl_load.o: $(SRC_DIR)/stl_load.c $(SRC_DIR)/stl_load.h
+	$(CC) $(CFLAGS) -I$(SRC_DIR) -c $(SRC_DIR)/stl_load.c -o stl_load.o
+
+# Target for debugging stl_load (launch debugger on test_stl_load binary)
+debug_stl_load: test_stl_load
+	lldb ./test_stl_load
+
 clean:
-	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_BUILD_DIR)
+	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_BUILD_DIR) test_stl_load stl_load.o
 
 .PHONY: all clean create_build_dir test format 
